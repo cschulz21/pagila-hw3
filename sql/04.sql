@@ -11,4 +11,5 @@ FROM(
     ) AS t
 INNER JOIN film_actor USING (film_id)
 INNER JOIN actor USING (actor_id)
-WHERE unnest = 'Behind the Scenes';
+WHERE unnest = 'Behind the Scenes'
+ORDER BY "Actor Name";
