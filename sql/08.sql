@@ -5,7 +5,17 @@
  * Your idea is that if a lot of people have rented both 'BUCKET BROTHERHOOD' and movie X,
  * then movie X must be similar and something you'd like to watch too.
  * Your goal is to create a SQL query that finds movie X.
- * Specifically, write a SQL query that returns all films that have been rented by at least 3 customers who have also rented 'BUCKET BROTHERHOOD'.
+ *SELECT DISTINCT 
+     f2.title
+FROM film as f1
+INNER JOIN inventory  i1 USING (film_id)
+INNER JOIN rental r1 USING (inventory_id)
+JOIN rental r2 on r1.customer_id = r2.customer_id
+INNER JOIN inventory i2 on r2.inventory_id = i2.inventory_id
+INNER JOIN film f2 on i2.film_id = f2.film_id
+WHERE f1.film_id = 103 
+AND f2.film_id != 103 
+ORDER BY title; Specifically, write a SQL query that returns all films that have been rented by at least 3 customers who have also rented 'BUCKET BROTHERHOOD'.
  *
  * HINT:
  * This query is very similar to the query from problem 06,
@@ -18,3 +28,22 @@
  *    Ensure that you are not counting a customer that has rented a movie twice as 2 separate customers renting the movie.
  *    I did this by using the SELECT DISTINCT clause.
  */
+-- 103
+SELECT
+    title
+FROM(
+    SELECT DISTINCT
+        f2.title,
+        r2.customer_id
+    FROM film as f1
+    INNER JOIN inventory  i1 USING (film_id)
+    INNER JOIN rental r1 USING (inventory_id)
+    JOIN rental r2 on r1.customer_id = r2.customer_id
+    INNER JOIN inventory i2 on r2.inventory_id = i2.inventory_id
+    INNER JOIN film f2 on i2.film_id = f2.film_id
+    WHERE f1.film_id = 103 
+    AND f2.film_id != 103
+) AS t
+GROUP BY title
+HAVING  count(*) >= 3
+ORDER BY title;
